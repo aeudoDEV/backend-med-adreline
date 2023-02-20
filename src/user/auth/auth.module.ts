@@ -1,0 +1,22 @@
+/* eslint-disable prettier/prettier */
+import { Module } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { LoginRepository } from '../repositories/login-repository';
+import { PrismaService } from 'src/db/prisma.service';
+import { jwtConstants } from './constants';
+
+@Module({
+  imports: [
+    PassportModule,
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' },
+    }),
+  ],
+  providers: [AuthService,JwtStrategy, LoginRepository, PrismaService ],
+  exports: [AuthService],
+})
+export class AuthModule {}
